@@ -33,15 +33,25 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
+                // authenticate all routes and use WebSecurityCustomizer to ignore public routes
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
+                );
 
         http.addFilterBefore(new AuthorizationOncePerRequestFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * Use WebSecurityCustomizer to ignore public endpoints/routes and use authorizeHttpRequests to authenticate others
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(PathUtils.PUBLIC_URLS).requestMatchers(PathUtils.SWAGGER_DOC_URLS);
+        // ignore any request
+        // return (web) -> web.ignoring().anyRequest();
     }
 
     // make sure it's only called once
@@ -51,9 +61,4 @@ public class SecurityConfig {
 //        registration.setEnabled(false);
 //        return registration;
 //    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(PathUtils.PUBLIC_URLS).requestMatchers(PathUtils.SWAGGER_DOC_URLS);
-    }
 }

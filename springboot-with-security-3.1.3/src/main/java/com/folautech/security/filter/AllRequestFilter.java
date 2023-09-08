@@ -9,6 +9,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Make filter a compnent so that it catches all requests outside of security
+ */
 @Component
 @Slf4j
 public class AllRequestFilter extends OncePerRequestFilter {
