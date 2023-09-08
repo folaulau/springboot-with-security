@@ -15,6 +15,19 @@ public class AllRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("AllRequestFilter.doFilter...");
+        String fullUrl = "";
+
+        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+        String queryString = request.getQueryString();
+
+        if (queryString == null) {
+            fullUrl = requestURL.toString();
+        } else {
+            fullUrl = requestURL.append('?').append(queryString).toString();
+        }
+
+        log.info("fullUrl: {}", fullUrl);
+
         filterChain.doFilter(request,response);
 //    }
     }

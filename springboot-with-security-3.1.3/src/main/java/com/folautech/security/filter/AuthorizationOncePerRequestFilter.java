@@ -56,6 +56,8 @@ public class AuthorizationOncePerRequestFilter extends OncePerRequestFilter {
 
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
             UsernamePasswordAuthenticationToken updateAuth = new UsernamePasswordAuthenticationToken("folau", "kaveinga", authorities);
 
             SecurityContextHolder.getContext().setAuthentication(updateAuth);

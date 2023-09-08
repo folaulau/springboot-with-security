@@ -31,16 +31,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
 
-//        http.addFilterBefore(new AuthorizationOncePerRequestFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
-
-        http.addFilterBefore(new AuthorizationOncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new AuthorizationOncePerRequestFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
 
         return http.build();
     }

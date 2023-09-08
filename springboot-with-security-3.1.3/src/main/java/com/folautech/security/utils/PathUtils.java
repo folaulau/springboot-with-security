@@ -8,7 +8,7 @@ public interface PathUtils {
 
     String[] PING_URLS        = {"/ping", "/ping/", "/csrf"};
 
-    String[] PUBLIC_URLS      = {"/public/**","/public/today-news"};
+    String[] PUBLIC_URLS      = {"/favicon.ico","/favicon/**","/public/**","/public/today-news"};
 
     String[] SWAGGER_DOC_URLS = {"/v3/api-docs/**", "/swagger-ui/**"};
 
