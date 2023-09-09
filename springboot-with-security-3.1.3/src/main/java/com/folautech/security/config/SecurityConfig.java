@@ -1,7 +1,9 @@
 package com.folautech.security.config;
 import com.folautech.security.filter.AuthorizationOncePerRequestFilter;
 import com.folautech.security.utils.PathUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -16,10 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    @Bean
-//    public AuthorizationOncePerRequestFilter authorizationOncePerRequestFilter(){
-//        return new AuthorizationOncePerRequestFilter();
-//    }
+    @Bean
+    public AuthorizationOncePerRequestFilter authorizationOncePerRequestFilter(){
+        return new AuthorizationOncePerRequestFilter();
+    }
 
 //    @Bean
 //    public AfterFilter afterFilter(){
@@ -39,7 +41,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 );
 
-        http.addFilterBefore(new AuthorizationOncePerRequestFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
+        http.addFilterBefore(authorizationOncePerRequestFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class);
 
         return http.build();
     }
@@ -55,10 +57,10 @@ public class SecurityConfig {
     }
 
     // make sure it's only called once
-//    @Bean
-//    public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration() {
-//        FilterRegistrationBean<AuthorizationFilter> registration = new FilterRegistrationBean<>(authorizationFilter);
-//        registration.setEnabled(false);
-//        return registration;
-//    }
+    @Bean
+    public FilterRegistrationBean<AuthorizationOncePerRequestFilter> authorizationFilterRegistration(AuthorizationOncePerRequestFilter authorizationOncePerRequestFilter) {
+        FilterRegistrationBean<AuthorizationOncePerRequestFilter> registration = new FilterRegistrationBean<>(authorizationOncePerRequestFilter);
+        registration.setEnabled(false);
+        return registration;
+    }
 }

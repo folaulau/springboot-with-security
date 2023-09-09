@@ -1,11 +1,13 @@
 package com.folautech.security.filter;
 
+import com.folautech.security.service.UserService;
 import com.folautech.security.utils.PathUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +22,9 @@ import java.util.List;
 //@Component
 @Slf4j
 public class AuthorizationOncePerRequestFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,6 +44,8 @@ public class AuthorizationOncePerRequestFilter extends OncePerRequestFilter {
         }
 
         log.info("fullUrl: {}", fullUrl);
+
+        userService.isValidUser("testemail");
 
         if(PathUtils.isPublicUrl(fullUrl)){
             log.info("public url");
